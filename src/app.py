@@ -27,10 +27,4 @@ if __name__ == '__main__':
     app.register_error_handler(404, PaginaNoEncontrada)
     app.run(debug=True)
 
-    #    paso a paso para crear el entorno virtual
-
-# 1. python -m venv nombre que queramos (en mi caso api-flak_mysql)
-# 2.aca activamos el entorno virtual: .\api-flak_mysql\Scripts\activate
-# 3.instalamos flask: pip install flask flask_mysqldb
-# 4.python .\src\app.py
-# .\entornoVirtual\Scripts\activate
+   
