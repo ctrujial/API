@@ -34,11 +34,11 @@ def listar_cursos():
 #     conexion.session.add(new_Task)
 #     conexion.session.commit()
     
-@app.route('/cursos/<nombre>')
-def leer_db(nombre):
+@app.route('/cursos/<cc>')
+def leer_db(cc):
     try:
         cursor = conexion.connection.cursor()
-        sql = "SELECT nombre, apellido, cc FROM usuario WHERE cc = '{0}'".format(nombre)
+        sql = "SELECT nombre, apellido, cc FROM usuario WHERE cc = '{0}'".format(cc) 
         cursor.execute(sql)
         datos=cursor.fetchone()
         cursos = []
@@ -50,6 +50,33 @@ def leer_db(nombre):
             return jsonify({'curso':cursos,'mensaje':"Usuario No Encontrado!."})
     except Exception as e:
      return "error"
+
+
+@app.route('/cursos/<nombre>')
+def leer_cc(nombre):
+    try:
+        cursor = conexion.connection.cursor()
+        sql = "SELECT nombre, apellido, cc FROM usuario WHERE nombre = '{0}'".format(nombre)
+        cursor.execute(sql)
+        datos=cursor.fetchone()
+        cursos = []
+        if datos != None:
+            curso = {'nombre': datos[0],'apellido': datos[1],'cc': datos[2]}
+            cursos.append(curso)
+            return jsonify({'curso':curso,'mensaje':"Usuario Encontrado!."})
+        else:
+            return jsonify({'curso':cursos,'mensaje':"Usuario No Encontrado!."})
+    except Exception as e:
+     return "error"
+
+@app.route('/cursos',methods=['POST'])
+def insertar():
+    try:
+        print(request.json)                
+        return jsonify({'mensaje':"Registro exitoso."})        
+    except Exception as e:
+     return "error"
+
 
 def PaginaNoEncontrada(error):
     return "<h1>tuki tuki lu lu...</h1>"
