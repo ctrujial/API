@@ -1,5 +1,7 @@
 from asyncio import Task, tasks
+#from crypt import methods
 from sqlite3 import Cursor
+from webbrowser import get
 from flask import Flask, jsonify, request
 from flask_mysqldb import MySQL
 from config import config
@@ -32,6 +34,22 @@ def listar_cursos():
 #     conexion.session.add(new_Task)
 #     conexion.session.commit()
     
+@app.route('/cursos/<nombre>')
+def leer_db(nombre):
+    try:
+        cursor = conexion.connection.cursor()
+        sql = "SELECT nombre, apellido, cc FROM usuario WHERE cc = '{0}'".format(nombre)
+        cursor.execute(sql)
+        datos=cursor.fetchone()
+        cursos = []
+        if datos != None:
+            curso = {'nombre': datos[0],'apellido': datos[1],'cc': datos[2]}
+            cursos.append(curso)
+            return jsonify({'curso':curso,'mensaje':"Usuario Encontrado!."})
+        else:
+            return jsonify({'curso':cursos,'mensaje':"Usuario No Encontrado!."})
+    except Exception as e:
+     return "error"
 
 def PaginaNoEncontrada(error):
     return "<h1>tuki tuki lu lu...</h1>"
