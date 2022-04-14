@@ -44,7 +44,7 @@ def leer_cc(cc):
      return "error"
 
 
-@app.route('/cursos/<nombre>')
+@app.route('/cursoss/<nombre>') #funciona
 def leer_name(nombre):
     try:
         cursor = conexion.connection.cursor()
@@ -72,18 +72,36 @@ def insertar():#funciona
     except Exception as e:
      return "error"
 
-# intentanto crear una tabla
-# @app.route('/cursos', methods=['POST'])
-# def insertar_tabla():#probando
-#     try:
-#         cursor = conexion.connection.cursor()
-#         sql = """CREATE table materia
-#         (nombre_m varchar (50), creditos int)""".format(request.json['nombre_m'],request.json['creditos'])            
-#         cursor.execute(sql)
-#         conexion.connection.commit()       
-#         return jsonify({'mensaje':"Tabla creada."})        
-#     except Exception as e:
-#      return "error"
+#intentanto crear una tabla
+@app.route('/cursosC', methods=['POST'])
+def insertar_tabla():#probando
+    try:
+        cursor = conexion.connection.cursor()
+        sql = """USE database CREATE table materia
+        (nombre_m varchar (50), creditos int ('{0}','{1}'))""".format(request.json['nombre_m'],request.json['creditos'])            
+        cursor.execute(sql)
+        conexion.connection.commit()       
+        return jsonify({'mensaje':"Tabla creada."})        
+    except Exception as e:
+     return "error"
+
+
+@app.route('/cursosss')
+def leer_cc_Max(cc):#validar
+    try:
+        cursor = conexion.connection.cursor()
+        sql = "(select max(cc)from usuario)"
+        cursor.execute(sql)
+        datos=cursor.fetchone()
+        #cursos = []
+        if datos != None:
+            curso = {'max(cc)': datos[0]}
+            #cursos.append(curso)
+            return jsonify({'curso':curso,'mensaje':"Usuario Encontrado!."})
+        else:
+            return jsonify({'curso':curso,'mensaje':"Usuario No Encontrado!."})
+    except Exception as e:
+     return "error"
 
 
 def PaginaNoEncontrada(error):
